@@ -52,7 +52,7 @@ public class AdsResource {
               .flatMap(List::stream)
               .collect(Collectors.toList());
         if (ads.size() == 0) {
-            return "Have you heard of Red Hat Forum Warsaw?";
+            return "Check out the sources of the demo: http://bit.ly/quarkus-search";
         }
         int adIndex = new Random().nextInt(ads.size());
         return ads.get(adIndex);

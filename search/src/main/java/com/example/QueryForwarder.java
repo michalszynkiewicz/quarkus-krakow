@@ -1,17 +1,20 @@
 package com.example;
 
-import io.vertx.core.json.JsonObject;
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Emitter;
+import com.example.queries.QueriesGrpc;
+import com.example.queries.Query;
+import io.quarkus.grpc.runtime.annotations.GrpcService;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 @ApplicationScoped
 public class QueryForwarder {
-    @Channel("search-terms")
-    Emitter<JsonObject> searchTermEmitter;
 
-    public void send(JsonObject payload) {
-        searchTermEmitter.send(payload);
+    @Inject
+    @GrpcService("queries")
+    QueriesGrpc.QueriesBlockingStub queriesBlockingStub;
+
+    public void send(String userId, String query) {
+        queriesBlockingStub.registerQuery(Query.newBuilder().setQuery(query).setUserId(userId).build());
     }
 }

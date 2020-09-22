@@ -1,10 +1,6 @@
 package com.example;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import io.vertx.core.json.JsonObject;
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -25,7 +21,6 @@ public class SearchEndpoint {
     @Inject
     QueryForwarder forwarder;
 
-
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,7 +28,7 @@ public class SearchEndpoint {
         if (userId == null || searchTerm == null) {
             return Collections.emptyList();
         }
-        forwarder.send(new JsonObject().put("userId", userId).put("query", searchTerm));
+        forwarder.send(userId, searchTerm);
 
         List<String> keywords = asList(searchTerm.split("[^\\w]+"));
 
